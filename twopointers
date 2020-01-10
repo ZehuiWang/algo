@@ -1,1 +1,34 @@
 
+#Question1 同向双指针
+
+https://leetcode.com/problems/minimum-size-subarray-sum/
+
+同向双指针
+每次删除左指针左边的数字
+只要当前和小于s，右指针继续向右移动
+时间复杂度O(N)
+
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        int right = 0;
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        
+        for(int left = 0; left < nums.length; left++){
+            while(right < nums.length && sum < s) {
+                sum += nums[right++];
+            }
+            if(sum >= s){
+                min = Math.min(min,right - left);
+                sum -= nums[left];
+            } 
+        }
+        if(min == Integer.MAX_VALUE){
+            return 0;
+        }
+        return min; 
+    }
+}
