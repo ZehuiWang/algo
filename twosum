@@ -1,0 +1,119 @@
+https://leetcode.com/problems/two-sum/submissions/
+
+1. Hash + 查询
+2. 排序 + 两个指针扫描
+
+class Solution {
+    class Pair{
+        Integer value;
+        Integer index;
+        
+        Pair(Integer value, Integer index){
+            this.value = value;
+            this.index = index;
+        }
+        Integer getValue(){
+            return this.value;
+        }
+    }
+    public int[] twoSum(int[] nums, int target) {
+        Pair[] number = new Pair[nums.length];
+        for(int i = 0;i < number.length;i++){
+            number[i] = new Pair(nums[i],i);
+        }
+        Arrays.sort(number,new Comparator<Pair>(){
+        @Override
+        public int compare(Pair o1,Pair o2){
+            return o1.getValue().compareTo(o2.getValue());
+        }
+    });
+        int left = 0;
+        int right = number.length - 1;
+        while(left < right){
+            if( number[left].getValue() + number[right].getValue() == target) {
+                int t1 = number[left].index;
+                int t2 = number[right].index;
+                int[] result = {Math.min(t1,t2), Math.max(t1,t2)};
+                return result;
+            }
+            if( number[left].getValue() + number[right].getValue() < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        int[] res = {};
+        return res;
+    }
+}
+
+https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+
+public int[] twoSum(int[] nums, int target) {
+        // write your code here
+        if (nums == null || nums.length < 2) {
+            return new int[0];
+        }
+
+        for (int l = 0, r = nums.length - 1; l < r; r--) {
+            while (l < r && nums[l] + nums[r] < target) {
+                l++;
+            }
+            if (l != r && nums[l] + nums[r] == target) {
+                return new int[]{l + 1, r + 1};
+            }
+
+        }
+        return new int[0];
+    }
+
+1. Hash + 查询 -> 线段树（平衡二叉树） + 查询
+2. 排序 + 两个指针扫描 -> 排序 + 两个指针
+
+
+https://www.jiuzhang.com/solution/two-sum-closest/
+
+
+public class Solution {
+    /*
+     * @param : the root of tree
+     * @param : the target sum
+     * @return: two numbers from tree which sum is n
+     */
+    public int[] twoSum(TreeNode root, int n) {
+        // write your code here
+        return helper(root, root, n);
+    }
+    
+    private TreeNode search(TreeNode root, int val) {
+        if (root == null) {
+            return null;
+        }
+        if (val == root.val) {
+            return root;
+        }
+        if (val < root.val) {
+            return search(root.left, val);
+        }
+        return search(root.right, val);
+    }
+    
+    private int[] helper(TreeNode root, TreeNode topRoot, int n) {
+        if (root == null) {
+            return null;
+        }
+        int ans[];
+        TreeNode another = search(topRoot, n - root.val);
+        if (another != null && another != root) {
+            ans = new int[2];
+            ans[0] = root.val;
+            ans[1] = n - root.val;
+            return ans;
+        }
+        ans = helper(root.left, topRoot, n);
+        if (ans != null) {
+            return ans;
+        }
+        return helper(root.right, topRoot, n);
+    }
+}
